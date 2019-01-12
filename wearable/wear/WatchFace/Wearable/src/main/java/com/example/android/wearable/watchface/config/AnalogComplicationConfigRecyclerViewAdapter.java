@@ -518,28 +518,24 @@ public class AnalogComplicationConfigRecyclerViewAdapter
                 }
 
             } else if (watchFaceComplicationId == mLeftComplicationId) {
-                updateComplicationView(complicationProviderInfo, mLeftComplication,
-                    mLeftComplicationBackground);
+                if (complicationProviderInfo != null) {
+                    mLeftComplication.setImageIcon(complicationProviderInfo.providerIcon);
+                    mLeftComplicationBackground.setVisibility(View.VISIBLE);
+
+                } else {
+                    mLeftComplication.setImageDrawable(mDefaultComplicationDrawable);
+                    mLeftComplicationBackground.setVisibility(View.INVISIBLE);
+                }
 
             } else if (watchFaceComplicationId == mRightComplicationId) {
-                updateComplicationView(complicationProviderInfo, mRightComplication,
-                    mRightComplicationBackground);
-            }
-        }
+                if (complicationProviderInfo != null) {
+                    mRightComplication.setImageIcon(complicationProviderInfo.providerIcon);
+                    mRightComplicationBackground.setVisibility(View.VISIBLE);
 
-        private void updateComplicationView(ComplicationProviderInfo complicationProviderInfo,
-            ImageButton button, ImageView background) {
-            if (complicationProviderInfo != null) {
-                button.setImageIcon(complicationProviderInfo.providerIcon);
-                button.setContentDescription(
-                    mContext.getString(R.string.edit_complication,
-                        complicationProviderInfo.appName + " " +
-                            complicationProviderInfo.providerName));
-                background.setVisibility(View.VISIBLE);
-            } else {
-                button.setImageDrawable(mDefaultComplicationDrawable);
-                button.setContentDescription(mContext.getString(R.string.add_complication));
-                background.setVisibility(View.INVISIBLE);
+                } else {
+                    mRightComplication.setImageDrawable(mDefaultComplicationDrawable);
+                    mRightComplicationBackground.setVisibility(View.INVISIBLE);
+                }
             }
         }
 

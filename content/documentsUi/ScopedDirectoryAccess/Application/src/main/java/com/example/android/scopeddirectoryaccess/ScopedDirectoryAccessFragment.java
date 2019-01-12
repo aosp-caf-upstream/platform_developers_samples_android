@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.storage.StorageManager;
@@ -31,7 +30,6 @@ import android.provider.DocumentsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +38,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +46,6 @@ import java.util.List;
  * Fragment that displays the directory contents.
  */
 public class ScopedDirectoryAccessFragment extends Fragment {
-
-    private static final String TAG = "ScopedDirectorySample";
 
     private static final String DIRECTORY_ENTRIES_KEY = "directory_entries";
     private static final String SELECTED_DIRECTORY_KEY = "selected_directory";
@@ -68,9 +63,6 @@ public class ScopedDirectoryAccessFragment extends Fragment {
     private TextView mNothingInDirectoryTextView;
     private TextView mPrimaryVolumeNameTextView;
     private Spinner mDirectoriesSpinner;
-    private LinearLayout mDirectoryAccessSettings;
-    private Button mLaunchDirectoryAccessSettings;
-
     private DirectoryEntryAdapter mAdapter;
     private ArrayList<DirectoryEntry> mDirectoryEntries;
 
@@ -110,25 +102,12 @@ public class ScopedDirectoryAccessFragment extends Fragment {
     public void onViewCreated(final View rootView, Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
 
-        mCurrentDirectoryTextView = rootView.findViewById(R.id.textview_current_directory);
-        mNothingInDirectoryTextView = rootView.findViewById(R.id.textview_nothing_in_directory);
-        mPrimaryVolumeNameTextView = rootView.findViewById(R.id.textview_primary_volume_name);
-
-        mDirectoryAccessSettings = rootView.findViewById(R.id.directory_access_settings);
-        mLaunchDirectoryAccessSettings = rootView.findViewById(R.id.launch);
-
-        // TODO: proper API check
-        if (Build.VERSION.CODENAME.equals("P")) {
-            mDirectoryAccessSettings.setVisibility(View.VISIBLE);
-            mLaunchDirectoryAccessSettings.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // TODO: use API constant for intent name
-                    Intent intent = new Intent("android.settings.DIRECTORY_ACCESS_SETTINGS");
-                    startActivity(intent);
-                }
-            });
-        }
+        mCurrentDirectoryTextView = (TextView) rootView
+                .findViewById(R.id.textview_current_directory);
+        mNothingInDirectoryTextView = (TextView) rootView
+                .findViewById(R.id.textview_nothing_in_directory);
+        mPrimaryVolumeNameTextView = (TextView) rootView
+                .findViewById(R.id.textview_primary_volume_name);
 
         // Set onClickListener for the primary volume
         Button openPictureButton = (Button) rootView
@@ -138,12 +117,6 @@ public class ScopedDirectoryAccessFragment extends Fragment {
             public void onClick(View view) {
                 String selected = mDirectoriesSpinner.getSelectedItem().toString();
                 String directoryName = getDirectoryName(selected);
-                Log.d(TAG, "Primary: selected=" + selected + " dir=" + directoryName);
-                if (directoryName == null) {
-                    Toast.makeText(getContext(), "Cannot select ROOT on primary directory",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
                 StorageVolume storageVolume = mStorageManager.getPrimaryStorageVolume();
                 Intent intent = storageVolume.createAccessIntent(directoryName);
                 startActivityForResult(intent, OPEN_DIRECTORY_REQUEST_CODE);
@@ -166,7 +139,7 @@ public class ScopedDirectoryAccessFragment extends Fragment {
             }
             LinearLayout volumeArea = (LinearLayout) mActivity.getLayoutInflater()
                     .inflate(R.layout.volume_entry, containerVolumes);
-            final TextView volumeName = volumeArea.findViewById(R.id.textview_volume_name);
+            TextView volumeName = (TextView) volumeArea.findViewById(R.id.textview_volume_name);
             volumeName.setText(volumeDescription);
             Button button = (Button) volumeArea.findViewById(R.id.button_open_directory);
             button.setOnClickListener(new View.OnClickListener() {
@@ -174,8 +147,6 @@ public class ScopedDirectoryAccessFragment extends Fragment {
                 public void onClick(View view) {
                     String selected = mDirectoriesSpinner.getSelectedItem().toString();
                     String directoryName = getDirectoryName(selected);
-                    Log.d(TAG, "Secondary: volume=" + volumeName.getText() + ", selected=" + selected
-                            + ", dir=" + directoryName);
                     Intent intent = volume.createAccessIntent(directoryName);
                     startActivityForResult(intent, OPEN_DIRECTORY_REQUEST_CODE);
                 }
@@ -250,8 +221,6 @@ public class ScopedDirectoryAccessFragment extends Fragment {
 
     private String getDirectoryName(String name) {
         switch (name) {
-            case "ROOT":
-                return null;
             case "ALARMS":
                 return Environment.DIRECTORY_ALARMS;
             case "DCIM":

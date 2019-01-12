@@ -9,9 +9,3 @@ samplegen {
 }
 apply from: "../../../../../build/build.gradle"
 // END_EXCLUDE
-
-buildscript {
-    repositories {
-        google()
-    }
-}

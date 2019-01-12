@@ -18,7 +18,6 @@
 
     <declare-styleable name="MovieView">
         <attr name="android:src"/>
-        <attr name="android:title"/>
         <attr name="android:adjustViewBounds"/>
     </declare-styleable>
 

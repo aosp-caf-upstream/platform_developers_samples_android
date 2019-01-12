@@ -26,7 +26,6 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -369,7 +368,7 @@ public class UtilityService extends IntentService {
                 .setSmallIcon(R.drawable.ic_stat_maps_pin_drop)
                 .setContentIntent(pendingIntent)
                 .setDeleteIntent(deletePendingIntent)
-                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setColor(getResources().getColor(R.color.colorPrimary, getTheme()))
                 .setCategory(Notification.CATEGORY_RECOMMENDATION)
                 .setAutoCancel(true);
 

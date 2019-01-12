@@ -19,6 +19,8 @@
     <group>UI</group>
     <package>com.example.android.contentproviderpaging</package>
 
+    <minSdk>"android-O"</minSdk>
+
     <strings>
         <intro>
 <![CDATA[

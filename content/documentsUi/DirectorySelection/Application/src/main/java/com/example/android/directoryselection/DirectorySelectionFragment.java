@@ -37,7 +37,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -199,13 +198,8 @@ public class DirectorySelectionFragment extends Fragment {
         ContentResolver contentResolver = getActivity().getContentResolver();
         Uri docUri = DocumentsContract.buildDocumentUriUsingTree(uri,
                 DocumentsContract.getTreeDocumentId(uri));
-        Uri directoryUri = null;
-        try {
-            directoryUri = DocumentsContract
-                    .createDocument(contentResolver, docUri, Document.MIME_TYPE_DIR, directoryName);
-        } catch (IOException e) {
-            Log.w(TAG, "IOException", e);
-        }
+        Uri directoryUri = DocumentsContract
+                .createDocument(contentResolver, docUri, Document.MIME_TYPE_DIR, directoryName);
         if (directoryUri != null) {
             Log.i(TAG, String.format(
                     "Created directory : %s, Document Uri : %s, Created directory Uri : %s",
